@@ -150,7 +150,6 @@ struct gpu_cx_ipeak_client {
  * @regulators - array of pointers to kgsl_regulator structs
  * @pcl - bus scale identifier
  * @gpu_cfg - CPU to GPU AHB path bus scale identifier
- * @irq_name - resource name for the IRQ
  * @clk_stats - structure of clock statistics
  * @l2pc_cpus_mask - mask to avoid L2PC on masked CPUs
  * @l2pc_update_queue - Boolean flag to avoid L2PC on masked CPUs at queue time
@@ -210,7 +209,6 @@ struct kgsl_pwrctrl {
 	struct kgsl_regulator regulators[KGSL_MAX_REGULATORS];
 	uint32_t pcl;
 	uint32_t gpu_cfg;
-	const char *irq_name;
 	struct kgsl_clk_stats clk_stats;
 	unsigned int l2pc_cpus_mask;
 	bool l2pc_update_queue;
