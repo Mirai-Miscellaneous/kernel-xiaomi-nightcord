@@ -1253,12 +1253,10 @@ int mdss_dsi_reg_status_check(struct mdss_dsi_ctrl_pdata *ctrl_pdata)
 	struct mdss_dsi_ctrl_pdata *sctrl_pdata = NULL;
 
 #if IS_ENABLED(CONFIG_MACH_XIAOMI_VINCE)
-	if (xiaomi_msm8953_mach_get() == XIAOMI_MSM8953_MACH_VINCE) {
-		nvt_csot_esd_status = get_nvt_csot_esd_status();
-		if (nvt_csot_esd_status == NULL) {
-			pr_err("%s: Invalid nvt_csot_esd_status\n", __func__);
-			return 0;
-		}
+	struct NVT_CSOT_ESD *nvt_csot_esd_status = get_nvt_csot_esd_status();
+	if (nvt_csot_esd_status == NULL){
+		pr_err("%s: Invalid nvt_csot_esd_status\n", __func__);
+		return 0;
 	}
 #endif
 
@@ -1314,36 +1312,29 @@ int mdss_dsi_reg_status_check(struct mdss_dsi_ctrl_pdata *ctrl_pdata)
 			  MDSS_DSI_ALL_CLKS, MDSS_DSI_CLK_OFF);
 	pr_debug("%s: Read register done with ret: %d\n", __func__, ret);
 
-	if (xiaomi_msm8953_mach_get() == XIAOMI_MSM8953_MACH_VINCE) {
-		struct NVT_CSOT_ESD *nvt_csot_esd_status = get_nvt_csot_esd_status();
-		if (nvt_csot_esd_status && (ret <= 0) && (!nvt_csot_esd_status->ESD_TE_status))
-			nvt_csot_esd_status->ESD_TE_status = true;
-	}
+#if IS_ENABLED(CONFIG_MACH_XIAOMI_VINCE)
+	if ((ret <= 0) && (!nvt_csot_esd_status->ESD_TE_status))
+		nvt_csot_esd_status->ESD_TE_status = true;
+#endif
 
 	return ret;
 }
 
+#if IS_ENABLED(CONFIG_MACH_XIAOMI_VINCE)
 extern u32 te_count;
 int mdss_dsi_TE_NT35596_check(struct mdss_dsi_ctrl_pdata *ctrl_pdata)
 {
-	int ret = 1;
-	struct NVT_CSOT_ESD *nvt_csot_esd_status;
-
-	if (xiaomi_msm8953_mach_get() != XIAOMI_MSM8953_MACH_VINCE) {
-		return 1;
-	}
-
-	nvt_csot_esd_status = get_nvt_csot_esd_status();
-	if (te_count < 48) {
+    int ret = 1;
+	struct NVT_CSOT_ESD *nvt_csot_esd_status = get_nvt_csot_esd_status();
+    if (te_count < 48){
 		ret = 0;
-		if (nvt_csot_esd_status) {
-			nvt_csot_esd_status->ESD_TE_status = true;
-		}
-		pr_err("liujia te_count doesnt add as time\n");
-	}
+		nvt_csot_esd_status->ESD_TE_status = true;
+		pr_err("liujia te_count doesnt add as time");
+    }
 	te_count = 0;
 	return ret;
 }
+#endif
 
 void mdss_dsi_dsc_config(struct mdss_dsi_ctrl_pdata *ctrl, struct dsc_desc *dsc)
 {
