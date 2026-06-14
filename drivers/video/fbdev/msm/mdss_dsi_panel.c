@@ -513,9 +513,7 @@ int mdss_dsi_panel_reset(struct mdss_panel_data *pdata, int enable)
 			gpio_free(ctrl_pdata->disp_en_gpio);
 		}
 #if IS_ENABLED(CONFIG_MACH_XIAOMI_VINCE)
-		if (xiaomi_msm8953_mach_get() == XIAOMI_MSM8953_MACH_VINCE) {
-			if (pullDownReset)
-		}
+		if (pullDownReset)
 #endif
 		gpio_set_value((ctrl_pdata->rst_gpio), 0);
 		gpio_free(ctrl_pdata->rst_gpio);
