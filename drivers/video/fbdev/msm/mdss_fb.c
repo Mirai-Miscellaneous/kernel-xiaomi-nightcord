@@ -1861,12 +1861,14 @@ void mdss_fb_set_backlight(struct msm_fb_data_type *mfd, u32 bkl_lvl)
 		 */
 		if (mfd->bl_level_scaled == temp) {
 			mfd->bl_level = bkl_lvl;
+#if IS_ENABLED(CONFIG_MACH_XIAOMI_VINCE)
 		if (xiaomi_msm8953_mach_get() == XIAOMI_MSM8953_MACH_VINCE) {
 			if ((0 == temp) && (ffbm_first_close_bl == true)) {
 				pdata->set_backlight(pdata, temp);
 				ffbm_first_close_bl = false;
 			}
 		}
+#endif
 		} else {
 			if (mfd->bl_level != bkl_lvl)
 				bl_notify_needed = true;
