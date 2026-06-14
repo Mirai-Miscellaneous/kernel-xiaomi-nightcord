@@ -3362,7 +3362,7 @@ static struct device_node *mdss_dsi_find_panel_of_node(
 			goto exit;
 
 #if IS_ENABLED(CONFIG_MACH_XIAOMI_VINCE)
-		if (xiaomi_msm8937_mach_get() == XIAOMI_MSM8937_MACH_VINCE) {
+		if (xiaomi_msm8953_mach_get() == XIAOMI_MSM8953_MACH_VINCE) {
 			if (!strcmp(panel_name, "qcom,mdss_dsi_nt36672_csot_fhdplus_video_e7")){
 				nvt_csot_esd_status->nova_csot_panel = true;
 				ESD_interval = 500;
