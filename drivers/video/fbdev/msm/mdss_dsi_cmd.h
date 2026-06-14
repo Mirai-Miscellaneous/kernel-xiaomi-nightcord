@@ -5,6 +5,9 @@
 #define MDSS_DSI_CMD_H
 
 #include "mdss.h"
+#if IS_ENABLED(CONFIG_MACH_XIAOMI_TITANIUM)
+#include <xiaomi-titanium/mach.h>
+#endif
 
 struct mdss_dsi_ctrl_pdata;
 

@@ -103,3 +103,18 @@ config PROC_UID
 	depends on PROC_FS && RT_MUTEXES
 	help
 	Provides aggregated per-uid information under /proc/uid.
+
+config PROC_CMDLINE_APPEND_ANDROID_FSTAB_SUFFIX
+	bool "Append Android fstab suffix parameter to /proc/cmdline"
+	depends on OF
+	default n
+	help
+	  Append Android fstab suffix parameter to /proc/cmdline.
+	  Parameter value is read from dt property "/android,fstab_suffix".
+
+config PROC_CMDLINE_OVERRIDE_ANDROID_BOOT_DEVICES
+	bool "Override Android boot devices parameter"
+	default y
+	help
+	  Say Y here to override Android boot devices parameter value
+	  from bootdevice parameter that supplied by the LK bootloader.

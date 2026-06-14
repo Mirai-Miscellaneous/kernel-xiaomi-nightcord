@@ -727,6 +727,12 @@ static int32_t msm_actuator_bivcm_move_focus(
 	if (dest_step_pos == a_ctrl->curr_step_pos)
 		return rc;
 
+#ifdef CONFIG_MACH_XIAOMI_VINCE
+	if (a_ctrl->step_position_table[dest_step_pos] ==
+		a_ctrl->step_position_table[a_ctrl->curr_step_pos])
+		return rc;
+#endif
+
 	if ((sign_dir > MSM_ACTUATOR_MOVE_SIGNED_NEAR) ||
 		(sign_dir < MSM_ACTUATOR_MOVE_SIGNED_FAR)) {
 		pr_err("Invalid sign_dir = %d\n", sign_dir);
@@ -1832,7 +1838,7 @@ static int32_t msm_actuator_power_up(struct msm_actuator_ctrl_t *a_ctrl)
 	}
 
 	/* VREG needs some delay to power up */
-	usleep_range(2000, 3000);
+	usleep_range(12000, 14000);
 	a_ctrl->actuator_state = ACT_ENABLE_STATE;
 
 	CDBG("Exit\n");
