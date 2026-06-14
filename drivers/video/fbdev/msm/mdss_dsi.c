@@ -473,9 +473,10 @@ int mdss_dsi_panel_power_off(struct mdss_panel_data *pdata)
 	if (mdss_dsi_pinctrl_set_state(ctrl_pdata, false))
 		pr_debug("reset disable: pinctrl not enabled\n");
 
+#if IS_ENABLED(CONFIG_MACH_XIAOMI_VINCE)
 	if (xiaomi_msm8953_mach_get() == XIAOMI_MSM8953_MACH_VINCE) {
 		if ((!synaptics_gesture_func_on) || (!synaptics_gesture_func_on_lansi)) {
-			if (nvt_csot_esd_status->nova_csot_panel && nvt_csot_esd_status->ESD_TE_status) {
+			if (nvt_csot_esd_status && nvt_csot_esd_status->nova_csot_panel && nvt_csot_esd_status->ESD_TE_status) {
 				ret = nova_esd_recovery(pdata);
 			} else {
 				if (vspn_power_state) {
@@ -488,7 +489,7 @@ int mdss_dsi_panel_power_off(struct mdss_panel_data *pdata)
 					vspn_power_state = false;
 				}
 			}
-		} else if (nvt_csot_esd_status->nova_csot_panel && nvt_csot_esd_status->ESD_TE_status) {
+		} else if (nvt_csot_esd_status && nvt_csot_esd_status->nova_csot_panel && nvt_csot_esd_status->ESD_TE_status) {
 			ret = nova_esd_recovery(pdata);
 		}
 	} else {
@@ -499,6 +500,14 @@ int mdss_dsi_panel_power_off(struct mdss_panel_data *pdata)
 			pr_err("%s: failed to disable vregs for %s\n",
 				__func__, __mdss_dsi_pm_name(DSI_PANEL_PM));
 	}
+#else
+	ret = msm_mdss_enable_vreg(
+		ctrl_pdata->panel_power_data.vreg_config,
+		ctrl_pdata->panel_power_data.num_vreg, 0);
+	if (ret)
+		pr_err("%s: failed to disable vregs for %s\n",
+			__func__, __mdss_dsi_pm_name(DSI_PANEL_PM));
+#endif
 
 end:
 	return ret;
